@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+
+Register | EduGenie
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="auth-card">
+
+
+    <h1>
+
+        Create your account
+
+    </h1>
+
+
+    <p>
+
+        Start your personalized learning journey.
+
+    </p>
+
+
+    {% if error %}
+
+        <div class="alert">
+
+            {{ error }}
+
+        </div>
+
+    {% endif %}
+
+
+    <form method="post">
+
+
+        <label>
+
+            Name
+
+        </label>
+
+
+        <input
+            type="text"
+            name="name"
+            required
+            placeholder="Your name"
+        >
+
+
+        <label>
+
+            Email
+
+        </label>
+
+
+        <input
+            type="email"
+            name="email"
+            required
+            placeholder="you@example.com"
+        >
+
+
+        <label>
+
+            Password
+
+        </label>
+
+
+        <input
+            type="password"
+            name="password"
+            minlength="6"
+            required
+            placeholder="Minimum 6 characters"
+        >
+
+
+        <button
+            class="button primary full"
+            type="submit"
+        >
+
+            Create Account
+
+        </button>
+
+
+    </form>
+
+
+    <p class="muted">
+
+        Already registered?
+
+        <a href="{{ url_for('login') }}">
+
+            Login
+
+        </a>
+
+    </p>
+
+
+</div>
+
+
+{% endblock %}

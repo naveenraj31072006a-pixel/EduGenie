@@ -1,0 +1,361 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+
+Quiz | EduGenie
+
+{% endblock %}
+
+
+{% block content %}
+
+
+<section class="quiz-head">
+
+
+    <span class="badge">
+
+        PRACTICE
+
+    </span>
+
+
+    <h1>
+
+        Quick Computer Science Quiz
+
+    </h1>
+
+
+    <p>
+
+        Answer the questions and save
+        your score to your dashboard.
+
+    </p>
+
+
+</section>
+
+
+
+<form
+    id="quizForm"
+    class="quiz-card"
+>
+
+
+    <!-- QUESTION 1 -->
+
+    <div class="question">
+
+
+        <h3>
+
+            1. Which language is commonly
+            used for web page structure?
+
+        </h3>
+
+
+        <label>
+
+            <input
+                type="radio"
+                name="q1"
+                value="HTML"
+            >
+
+            HTML
+
+        </label>
+
+
+        <label>
+
+            <input
+                type="radio"
+                name="q1"
+                value="Python"
+            >
+
+            Python
+
+        </label>
+
+
+        <label>
+
+            <input
+                type="radio"
+                name="q1"
+                value="SQL"
+            >
+
+            SQL
+
+        </label>
+
+
+    </div>
+
+
+
+    <!-- QUESTION 2 -->
+
+    <div class="question">
+
+
+        <h3>
+
+            2. Which data structure follows FIFO?
+
+        </h3>
+
+
+        <label>
+
+            <input
+                type="radio"
+                name="q2"
+                value="Stack"
+            >
+
+            Stack
+
+        </label>
+
+
+        <label>
+
+            <input
+                type="radio"
+                name="q2"
+                value="Queue"
+            >
+
+            Queue
+
+        </label>
+
+
+        <label>
+
+            <input
+                type="radio"
+                name="q2"
+                value="Tree"
+            >
+
+            Tree
+
+        </label>
+
+
+    </div>
+
+
+
+    <!-- QUESTION 3 -->
+
+    <div class="question">
+
+
+        <h3>
+
+            3. What does AI stand for?
+
+        </h3>
+
+
+        <label>
+
+            <input
+                type="radio"
+                name="q3"
+                value="Artificial Intelligence"
+            >
+
+            Artificial Intelligence
+
+        </label>
+
+
+        <label>
+
+            <input
+                type="radio"
+                name="q3"
+                value="Automatic Internet"
+            >
+
+            Automatic Internet
+
+        </label>
+
+
+        <label>
+
+            <input
+                type="radio"
+                name="q3"
+                value="Applied Input"
+            >
+
+            Applied Input
+
+        </label>
+
+
+    </div>
+
+
+
+    <button
+        class="button primary"
+        type="submit"
+    >
+
+        Submit Quiz
+
+    </button>
+
+
+
+    <div
+        id="quizResult"
+        class="result-box hidden"
+    ></div>
+
+
+</form>
+
+
+{% endblock %}
+
+
+
+{% block scripts %}
+
+
+<script>
+
+document
+    .getElementById("quizForm")
+    .addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const form =
+                new FormData(event.target);
+
+
+            const answers = {
+
+                q1: form.get("q1"),
+
+                q2: form.get("q2"),
+
+                q3: form.get("q3")
+
+            };
+
+
+            const correct = {
+
+                q1: "HTML",
+
+                q2: "Queue",
+
+                q3: "Artificial Intelligence"
+
+            };
+
+
+            let score = 0;
+
+
+            Object.keys(correct)
+                .forEach(function(key) {
+
+                    if (
+                        answers[key]
+                        === correct[key]
+                    ) {
+
+                        score++;
+
+                    }
+
+                });
+
+
+            const box =
+                document.getElementById(
+                    "quizResult"
+                );
+
+
+            box.classList.remove(
+                "hidden"
+            );
+
+
+            box.innerHTML = `
+
+                <h3>
+
+                    Your score: ${score}/3
+
+                </h3>
+
+                <p>
+
+                    Your result has been
+                    saved to your progress.
+
+                </p>
+
+            `;
+
+
+            await fetch(
+                "/api/progress",
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body: JSON.stringify({
+
+                        activity:
+                            "Computer Science Quiz",
+
+                        score:
+                            score,
+
+                        total:
+                            3
+
+                    })
+
+                }
+            );
+
+        }
+    );
+
+</script>
+
+
+{% endblock %}

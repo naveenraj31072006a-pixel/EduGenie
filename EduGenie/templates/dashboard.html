@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | EduGenie</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+    <!-- EduGenie CSS -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+    <style>
+
+        /* ================================
+           DASHBOARD PAGE
+        ================================= */
+
+        body {
+            background: #f4f7fb;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #1e293b;
+        }
+
+        /* NAVBAR */
+
+        .dashboard-navbar {
+            background: linear-gradient(
+                135deg,
+                #4f46e5,
+                #7c3aed
+            );
+
+            padding: 14px 0;
+
+            box-shadow:
+                0 4px 20px rgba(0,0,0,0.10);
+        }
+
+        .brand-logo {
+            color: white;
+            text-decoration: none;
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .brand-logo span {
+            color: #ddd6fe;
+        }
+
+        .nav-user {
+            color: white;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            border: 1px solid rgba(255,255,255,0.5);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 10px;
+            text-decoration: none;
+            margin-left: 15px;
+        }
+
+        .logout-btn:hover {
+            background: white;
+            color: #4f46e5;
+        }
+
+        /* MAIN */
+
+        .dashboard-wrapper {
+            max-width: 1250px;
+            margin: auto;
+            padding: 35px 20px;
+        }
+
+        /* WELCOME */
+
+        .welcome-section {
+            background:
+                linear-gradient(
+                    135deg,
+                    #4f46e5,
+                    #7c3aed
+                );
+
+            color: white;
+
+            border-radius: 25px;
+
+            padding: 40px;
+
+            position: relative;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 15px 35px rgba(79,70,229,0.25);
+
+            margin-bottom: 30px;
+        }
+
+        .welcome-section::after {
+            content: "🎓";
+
+            position: absolute;
+
+            right: 50px;
+            bottom: -20px;
+
+            font-size: 130px;
+
+            opacity: 0.12;
+        }
+
+        .welcome-section h1 {
+            font-size: 34px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .welcome-section p {
+            font-size: 17px;
+            opacity: 0.9;
+            margin-bottom: 0;
+        }
+
+        .welcome-badge {
+            display: inline-block;
+
+            background: rgba(255,255,255,0.18);
+
+            padding: 7px 13px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+
+            margin-bottom: 15px;
+        }
+
+        /* STAT CARDS */
+
+        .stat-card {
+            background: white;
+
+            border: none;
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            height: 100%;
+
+            box-shadow:
+                0 5px 25px rgba(15,23,42,0.06);
+
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+
+            box-shadow:
+                0 12px 30px rgba(15,23,42,0.12);
+        }
+
+        .stat-icon {
+            width: 55px;
+            height: 55px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 15px;
+
+            background: #eef2ff;
+
+            color: #4f46e5;
+
+            font-size: 26px;
+
+            margin-bottom: 15px;
+        }
+
+        .stat-card h3 {
+            font-size: 27px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            color: #64748b;
+            margin: 0;
+        }
+
+        /* SECTION TITLE */
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        /* AI CARD */
+
+        .ai-card {
+            background: white;
+
+            border-radius: 22px;
+
+            padding: 30px;
+
+            box-shadow:
+                0 5px 25px rgba(15,23,42,0.06);
+
+            margin-top: 30px;
+        }
+
+        .ai-heading {
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+
+            margin-bottom: 25px;
+        }
+
+        .ai-logo {
+            width: 60px;
+            height: 60px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ede9fe,
+                    #ddd6fe
+                );
+
+            border-radius: 17px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 30px;
+        }
+
+        .ai-heading h2 {
+            font-size: 25px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .ai-heading p {
+            margin: 5px 0 0;
+            color: #64748b;
+        }
+
+        /* INPUT */
+
+        .question-label {
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .question-box {
+            width: 100%;
+
+            min-height: 140px;
+
+            border: 2px solid #e2e8f0;
+
+            border-radius: 15px;
+
+            padding: 17px;
+
+            font-size: 16px;
+
+            resize: vertical;
+
+            outline: none;
+
+            transition: 0.3s;
+        }
+
+        .question-box:focus {
+            border-color: #6366f1;
+
+            box-shadow:
+                0 0 0 4px
+                rgba(99,102,241,0.10);
+        }
+
+        /* AI BUTTONS */
+
+        .ai-actions {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 10px;
+
+            margin-top: 15px;
+        }
+
+        .ai-action-btn {
+            border: none;
+
+            border-radius: 11px;
+
+            padding: 11px 18px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #4f46e5,
+                    #6366f1
+                );
+
+            transition: 0.3s;
+        }
+
+        .ai-action-btn:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 7px 18px
+                rgba(79,70,229,0.25);
+        }
+
+        .ai-action-btn.summary {
+            background: #0891b2;
+        }
+
+        .ai-action-btn.example {
+            background: #059669;
+        }
+
+        .ai-action-btn.quiz {
+            background: #ea580c;
+        }
+
+        /* AI RESPONSE */
+
+        .response-box {
+            margin-top: 25px;
+
+            background: #f8fafc;
+
+            border: 1px solid #e2e8f0;
+
+            border-left:
+                5px solid #6366f1;
+
+            border-radius: 14px;
+
+            padding: 22px;
+
+            min-height: 100px;
+        }
+
+        .response-title {
+            font-weight: 700;
+
+            margin-bottom: 10px;
+
+            color: #4f46e5;
+        }
+
+        #aiAnswer {
+            color: #475569;
+
+            line-height: 1.7;
+
+            white-space: pre-wrap;
+        }
+
+        /* QUICK LEARNING */
+
+        .quick-card {
+            background: white;
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            height: 100%;
+
+            box-shadow:
+                0 5px 25px
+                rgba(15,23,42,0.06);
+
+            transition: 0.3s;
+        }
+
+        .quick-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .quick-icon {
+            font-size: 35px;
+            margin-bottom: 15px;
+        }
+
+        .quick-card h4 {
+            font-size: 19px;
+            font-weight: 700;
+        }
+
+        .quick-card p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        /* QUIZ BUTTON */
+
+        .practice-btn {
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #7c3aed,
+                    #9333ea
+                );
+
+            color: white;
+
+            padding: 11px 18px;
+
+            border-radius: 11px;
+
+            text-decoration: none;
+
+            font-weight: 600;
+
+            transition: 0.3s;
+        }
+
+        .practice-btn:hover {
+            color: white;
+
+            transform: translateY(-2px);
+        }
+
+        /* PROGRESS */
+
+        .progress-card {
+            background: white;
+
+            border-radius: 22px;
+
+            padding: 30px;
+
+            box-shadow:
+                0 5px 25px
+                rgba(15,23,42,0.06);
+
+            margin-top: 30px;
+        }
+
+        .progress-table {
+            width: 100%;
+
+            border-collapse: collapse;
+        }
+
+        .progress-table th {
+            background: #f8fafc;
+
+            color: #475569;
+
+            font-size: 14px;
+
+            padding: 14px;
+
+            text-align: left;
+        }
+
+        .progress-table td {
+            padding: 15px 14px;
+
+            border-bottom:
+                1px solid #e2e8f0;
+        }
+
+        .score-badge {
+            display: inline-block;
+
+            padding: 5px 10px;
+
+            border-radius: 20px;
+
+            background: #dcfce7;
+
+            color: #166534;
+
+            font-size: 13px;
+
+            font-weight: 700;
+        }
+
+        /* FOOTER */
+
+        .dashboard-footer {
+            margin-top: 50px;
+
+            background: #0f172a;
+
+            color: white;
+
+            text-align: center;
+
+            padding: 25px;
+        }
+
+        .dashboard-footer p {
+            margin: 0;
+        }
+
+        .dashboard-footer small {
+            color: #94a3b8;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 768px) {
+
+            .dashboard-wrapper {
+                padding: 25px 15px;
+            }
+
+            .welcome-section {
+                padding: 28px;
+            }
+
+            .welcome-section h1 {
+                font-size: 27px;
+            }
+
+            .ai-card,
+            .progress-card {
+                padding: 22px;
+            }
+
+            .ai-actions {
+                flex-direction: column;
+            }
+
+            .ai-action-btn {
+                width: 100%;
+            }
+
+            .progress-table {
+                font-size: 13px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================
+     NAVBAR
+========================================= -->
+
+<nav class="dashboard-navbar">
+
+    <div class="container">
+
+        <div class="d-flex align-items-center justify-content-between">
+
+            <a href="/dashboard" class="brand-logo">
+                🎓 Edu<span>Genie</span>
+            </a>
+
+            <div class="d-flex align-items-center">
+
+                <span class="nav-user d-none d-md-inline">
+                    👋 {{ session.get('user_name', 'Student') }}
+                </span>
+
+                <a href="/logout" class="logout-btn">
+                    <i class="bi bi-box-arrow-right"></i>
+                    Logout
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<!-- =========================================
+     MAIN DASHBOARD
+========================================= -->
+
+<main class="dashboard-wrapper">
+
+
+    <!-- =====================================
+         WELCOME
+    ====================================== -->
+
+    <section class="welcome-section">
+
+        <span class="welcome-badge">
+            ✨ AI Powered Learning
+        </span>
+
+        <h1>
+            Hello, {{ session.get('user_name', 'Student') }}! 👋
+        </h1>
+
+        <p>
+            What would you like to learn today?
+            Let EduGenie help you learn smarter.
+        </p>
+
+    </section>
+
+
+    <!-- =====================================
+         STATISTICS
+    ====================================== -->
+
+    <div class="row g-4">
+
+
+        <!-- ACTIVITIES -->
+
+        <div class="col-md-4">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    <i class="bi bi-activity"></i>
+                </div>
+
+                <h3>
+                    {{ progress|length }}
+                </h3>
+
+                <p>
+                    Learning Activities
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- QUIZ POINTS -->
+
+        <div class="col-md-4">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    <i class="bi bi-trophy"></i>
+                </div>
+
+                <h3>
+    {% if progress %}
+        {{ progress.score }}/{{ progress.total }}
+    {% else %}
+        0/0
+    {% endif %}
+</h3>
+
+                <p>
+                    Latest Quiz Points
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- SCORE -->
+
+        <div class="col-md-4">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    <i class="bi bi-graph-up-arrow"></i>
+                </div>
+
+                <h3>
+    {% if progress and progress.total %}
+        {{ ((progress.score / progress.total) * 100)|round(1) }}%
+    {% else %}
+        0%
+    {% endif %}
+</h3>
+
+                <p>
+                    Latest Score Rate
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================
+         AI STUDY ASSISTANT
+    ====================================== -->
+
+    <section class="ai-card">
+
+
+        <div class="ai-heading">
+
+            <div class="ai-logo">
+                🤖
+            </div>
+
+            <div>
+
+                <h2>
+                    AI Study Assistant
+                </h2>
+
+                <p>
+                    Ask anything and learn concepts in simple language.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <label class="question-label">
+            Enter your subject, chapter, or question
+        </label>
+
+
+        <textarea
+            id="topicInput"
+            class="question-box"
+            placeholder="Example: Explain loops in Python..."
+        >{% if topic %}{{ topic }}{% endif %}</textarea>
+
+
+        <!-- BUTTONS -->
+
+        <div class="ai-actions">
+
+            <button
+                type="button"
+                class="ai-action-btn"
+                onclick="askAI('explain')"
+            >
+                <i class="bi bi-lightbulb"></i>
+                Explain
+            </button>
+
+
+            <button
+                type="button"
+                class="ai-action-btn summary"
+                onclick="askAI('summary')"
+            >
+                <i class="bi bi-file-text"></i>
+                Summary
+            </button>
+
+
+            <button
+                type="button"
+                class="ai-action-btn example"
+                onclick="askAI('example')"
+            >
+                <i class="bi bi-stars"></i>
+                Example
+            </button>
+
+
+            <button
+                type="button"
+                class="ai-action-btn quiz"
+                onclick="createQuiz()"
+            >
+                <i class="bi bi-question-circle"></i>
+                Create Quiz
+            </button>
+
+        </div>
+
+
+        <!-- RESPONSE -->
+
+        <div class="response-box">
+
+            <div class="response-title">
+                🤖 EduGenie AI
+            </div>
+
+            <div id="aiAnswer">
+
+                Your AI answer will appear here.
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================
+         QUICK LEARNING
+    ====================================== -->
+
+    <div class="mt-5">
+
+        <h2 class="section-title">
+            🚀 Quick Learning
+        </h2>
+
+
+        <div class="row g-4">
+
+
+            <!-- EXPLAIN -->
+
+            <div class="col-md-4">
+
+                <div class="quick-card">
+
+                    <div class="quick-icon">
+                        💡
+                    </div>
+
+                    <h4>
+                        Understand Concepts
+                    </h4>
+
+                    <p>
+                        Get easy-to-understand explanations
+                        for difficult topics.
+                    </p>
+
+                    <button
+                        class="practice-btn border-0"
+                        onclick="quickTopic('Explain Python basics')"
+                    >
+                        Learn Now
+                        <i class="bi bi-arrow-right"></i>
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- SUMMARY -->
+
+            <div class="col-md-4">
+
+                <div class="quick-card">
+
+                    <div class="quick-icon">
+                        📝
+                    </div>
+
+                    <h4>
+                        Quick Revision
+                    </h4>
+
+                    <p>
+                        Generate short summaries to revise
+                        your subjects quickly.
+                    </p>
+
+                    <button
+                        class="practice-btn border-0"
+                        onclick="quickTopic('Give me a short study summary')"
+                    >
+                        Revise
+                        <i class="bi bi-arrow-right"></i>
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- QUIZ -->
+
+            <div class="col-md-4">
+
+                <div class="quick-card">
+
+                    <div class="quick-icon">
+                        🎯
+                    </div>
+
+                    <h4>
+                        Test Yourself
+                    </h4>
+
+                    <p>
+                        Practice quizzes and check your
+                        learning progress.
+                    </p>
+
+                    <a
+                        href="/quiz"
+                        class="practice-btn"
+                    >
+                        Practice Quiz
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================
+         RECENT PROGRESS
+    ====================================== -->
+
+    <section class="progress-card">
+
+
+        <div class="d-flex justify-content-between
+                    align-items-center mb-4">
+
+            <h2 class="section-title mb-0">
+                📊 Recent Progress
+            </h2>
+
+            <a
+                href="/quiz"
+                class="practice-btn"
+            >
+                <i class="bi bi-play-fill"></i>
+                Practice Quiz
+            </a>
+
+        </div>
+
+
+        {% if progress %}
+
+        <div class="table-responsive">
+
+            <table class="progress-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Activity
+                        </th>
+
+                        <th>
+                            Score
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for item in progress %}
+
+                    <tr>
+
+                        <td>
+
+                            <strong>
+                                {{ item.activity }}
+                            </strong>
+
+                        </td>
+
+
+                        <td>
+
+                            <span class="score-badge">
+
+                                {{ item.score }}/{{ item.total }}
+
+                            </span>
+
+                        </td>
+
+
+                        <td>
+
+                            {{ item.date }}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="text-center py-5">
+
+            <div style="font-size:50px;">
+                📚
+            </div>
+
+            <h4 class="mt-3">
+                No learning activity yet
+            </h4>
+
+            <p class="text-muted">
+                Start a quiz to see your progress here.
+            </p>
+
+            <a
+                href="/quiz"
+                class="practice-btn"
+            >
+                Start Your First Quiz
+            </a>
+
+        </div>
+
+        {% endif %}
+
+
+    </section>
+
+
+</main>
+
+
+<!-- =========================================
+     FOOTER
+========================================= -->
+
+<footer class="dashboard-footer">
+
+    <p>
+        🎓 <strong>EduGenie</strong>
+        • AI Personalized Learning Platform
+    </p>
+
+    <small>
+        Learn Smarter • Practice Better • Grow Faster
+    </small>
+
+</footer>
+
+
+<!-- =========================================
+     AI JAVASCRIPT
+========================================= -->
+
+<script>
+
+async function askAI(action) {
+
+    const input =
+        document.getElementById("topicInput");
+
+    const answer =
+        document.getElementById("aiAnswer");
+
+    const topic =
+        input.value.trim();
+
+
+    if (!topic) {
+
+        answer.innerHTML =
+            "⚠️ Please enter a topic or question first.";
+
+        input.focus();
+
+        return;
+    }
+
+
+    answer.innerHTML =
+        "🤖 EduGenie is thinking...";
+
+
+    try {
+
+        const response =
+            await fetch("/api/ai", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    topic: topic,
+
+                    action: action
+
+                })
+
+            });
+
+
+        const data =
+            await response.json();
+
+
+        if (data.answer) {
+
+            answer.innerHTML =
+                formatAnswer(data.answer);
+
+        }
+
+        else if (data.response) {
+
+            answer.innerHTML =
+                formatAnswer(data.response);
+
+        }
+
+        else if (data.error) {
+
+            answer.innerHTML =
+                "❌ " + data.error;
+
+        }
+
+        else {
+
+            answer.innerHTML =
+                "⚠️ No answer received.";
+
+        }
+
+
+    }
+
+    catch (error) {
+
+        answer.innerHTML =
+            "❌ Unable to connect to the AI service.";
+
+        console.error(error);
+
+    }
+
+}
+
+
+/* =========================================
+   CREATE QUIZ
+========================================= */
+
+function createQuiz() {
+
+    const input =
+        document.getElementById("topicInput");
+
+    const topic =
+        input.value.trim();
+
+
+    if (!topic) {
+
+        input.focus();
+
+        document.getElementById("aiAnswer").innerHTML =
+            "⚠️ Please enter a topic first.";
+
+        return;
+    }
+
+
+    window.location.href =
+        "/quiz?topic=" +
+        encodeURIComponent(topic);
+
+}
+
+
+/* =========================================
+   QUICK TOPIC
+========================================= */
+
+function quickTopic(topic) {
+
+    document.getElementById("topicInput").value =
+        topic;
+
+    document.getElementById("topicInput").scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
+}
+
+
+/* =========================================
+   FORMAT AI ANSWER
+========================================= */
+
+function formatAnswer(text) {
+
+    if (!text) {
+        return "";
+    }
+
+
+    return text
+        .replace(/\n/g, "<br>")
+        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+
+}
+
+</script>
+
+
+<!-- Bootstrap JS -->
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+</body>
+
+</html>
